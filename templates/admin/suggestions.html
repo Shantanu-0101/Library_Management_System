@@ -1,0 +1,38 @@
+{% extends 'base_admin.html' %}
+{% block title %}Book Suggestion{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <h3>Suggested Books</h3>
+
+
+  <div class="table-responsive">
+<table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Student</th>
+        <th>Roll No</th>
+        <th>Book Title</th>
+        <th>Author</th>
+        <th>Reason</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for suggestion in suggestions %}
+      <tr>
+        <td>{{ suggestion.student.name }}</td>
+        <td>{{ suggestion.student.roll_number }}</td>
+        <td>{{ suggestion.title }}</td>
+        <td>{{ suggestion.author }}</td>
+        <td>{{ suggestion.reason }}</td>
+        <td>{{ suggestion.created_at.strftime('%d %b %Y') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</div>
+{% endblock %}

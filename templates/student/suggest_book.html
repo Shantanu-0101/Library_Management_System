@@ -1,0 +1,25 @@
+{% extends 'base_student.html' %}
+{% block content %}
+<div class="container mt-4">
+  <div class="auth-card mx-auto" style="max-width:500px;">
+    <h4>Request a New Book</h4>
+    <p class="subtitle">Can't find a book? Let the librarian know.</p>
+
+    {% if success %}
+      <div class="alert alert-success auto-alert">
+        Request sent successfully!
+      </div>
+    {% endif %}
+
+    <form method="POST">
+      <input type="text" name="title"
+             placeholder="Book title" required>
+      <input type="text" name="author"
+             placeholder="Author (optional)">
+      <textarea name="reason" rows="3"
+                placeholder="Why do you need this book?"></textarea>
+      <button type="submit" class="btn-student">Send Request</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

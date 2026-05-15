@@ -1,0 +1,68 @@
+{% extends 'base_admin.html' %}
+{% block title %}Issued Books{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <h3>Issued Books</h3>
+
+  <!-- Filter tabs -->
+  <div class="mb-3 mt-3">
+    <a href="{{ url_for('admin_issued') }}" 
+       class="btn btn-sm btn-dark me-1">All</a>
+    <a href="{{ url_for('admin_issued', filter='active') }}" 
+       class="btn btn-sm btn-outline-success me-1">Active</a>
+    <a href="{{ url_for('admin_issued', filter='returned') }}" 
+       class="btn btn-sm btn-outline-secondary">Returned</a>
+  </div>
+
+  <div class="table-responsive">
+<table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Student</th>
+        <th>Roll No</th>
+        <th>Book</th>
+        <th>Issue Date</th>
+        <th>Due Date</th>
+        <th>Return Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in issued %}
+      <tr class="{{ 'table-warning' if record.status.value == 'issued' and record.due_date < now else '' }}">
+        <td>{{ record.student.name }}</td>
+        <td>{{ record.student.roll_number }}</td>
+        <td>{{ record.book.title }}</td>
+        <td>{{ record.issue_date.strftime('%d %b %Y') }}</td>
+        <td>{{ record.due_date.strftime('%d %b %Y') }}</td>
+        <td>
+          {% if record.return_date %}
+            {{ record.return_date.strftime('%d %b %Y') }}
+          {% else %}
+            <span class="text-muted">Not returned</span>
+          {% endif %}
+        </td>
+        <!-- inside your issued books table row -->
+        <td>
+          {% if record.status.value == 'issued' %}
+          <form action="{{ url_for('admin_return_book', issued_id=record.id) }}"
+                method="POST">
+            <button type="submit" class="btn btn-warning btn-sm"
+                    onclick="return confirm('Mark this book as returned?')">
+              Mark Returned
+            </button>
+          </form>
+          {% else %}
+            <span class="text-muted" style="font-size:13px;">Returned</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</div>
+{% endblock %}

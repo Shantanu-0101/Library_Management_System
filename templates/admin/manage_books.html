@@ -1,0 +1,62 @@
+{% extends 'base_admin.html' %}
+{% block title %}Manage-Books{% endblock %}
+
+{% block content %}
+<div class="gap-2 d-md-flex justify-content-end mt-1 me-4 md-4">
+<a class="btn btn-primary" href="/add_books" role="button">Add Books</a>
+</div>
+
+
+
+<div id="booksContainer" class="container">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search any Book...">
+    </div> 
+    <div class="row" id=".card">
+        {% for book in books | reverse %}
+            <div class="col-md-3 mt-3">
+                <div class="card" style="width: 15rem;">
+                    {% if book.cover_image %}
+                    <img src="{{ url_for('static', filename='images/' + book.cover_image) }}" class="card-img-top" alt="" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/default.jpg') }}" class="card-img-top" alt="" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item text-truncate">Author: {{ book.author }}</li>
+                        <li class="list-group-item">Available copies : {{ book.available_copies }}</li>
+                    </ul>
+                    <div class="card-body d-flex gap-2">
+                        <a href="/admin/books/edit/{{ book.id }}/" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <form action="{{ url_for('delete', book_id=book.id) }}" method="POST">
+                            <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+    <script>
+    const bookSearch   = document.getElementById('searchInput');
+    const bookCards    = document.querySelectorAll('.card');
+
+    bookSearch.addEventListener('keyup', function() {
+        const searchText = bookSearch.value.toLowerCase();
+
+        bookCards.forEach(card => {
+        const cardText = card.textContent.toLowerCase();
+
+        if (cardText.includes(searchText)) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+        });
+    });
+    </script>
+
+{% endblock %}

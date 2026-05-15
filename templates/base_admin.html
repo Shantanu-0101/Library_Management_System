@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin Panel{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+
+  <nav class="navbar navbar-expand-lg admin-nav">
+    <div class="container-fluid px-0">
+      <a href="/admin/dashboard" class="navbar-brand admin-logo">CSMSS<span>-Admin</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="adminNavbar">
+        <div class="navbar-nav nav-links align-items-lg-center">
+          <a href="/admin/dashboard" class="nav-link admin-nav-link">Dashboard</a>
+          <a href="/admin/requests" class="nav-link admin-nav-link">Requests</a>
+          <a href="/admin/books" class="nav-link admin-nav-link">Books</a>
+          <a href="/admin/students" class="nav-link admin-nav-link">Students</a>
+          <a href="/admin/issued" class="nav-link admin-nav-link">Issued</a>
+          <a href="/admin/fines" class="nav-link admin-nav-link">Fines</a>
+          <a href="/admin/notifications" class="nav-link admin-nav-link">Announcements</a>
+          <a href="/admin/suggestions" class="nav-link admin-nav-link">Suggestions</a>
+          <a href="/logout" class="btn-admin-outline ms-lg-3 mt-2 mt-lg-0">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    // Get the current page URL path e.g. "/admin/books"
+    const currentPath = window.location.pathname;
+
+    // Get all navbar links
+    const navLinks = document.querySelectorAll('.admin-nav-link');
+
+    // Loop through each link
+    navLinks.forEach(link => {
+      // Get the link's href e.g. "/admin/books"
+      const linkPath = link.getAttribute('href');
+
+      // If current URL matches this link's href → add active class
+      if (currentPath === linkPath) {
+        link.classList.add('nav-active');
+      }
+    });
+  </script>
+</body>
+</html>

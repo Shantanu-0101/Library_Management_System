@@ -1,0 +1,90 @@
+{% extends 'base_admin.html' %}
+{% block title %}Manage_students{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+  <h3>Manage Students</h3>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by student name...">
+    </div>
+    <div class="table-responsive">
+    <table id="studentsTable" class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Roll Number</th>
+        <th>Issued Books</th>
+        <th>Fines</th>
+        <th>View Details</th>
+        <th>Approve</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for student in students %}
+    <tr>
+    <td>{{ student.name }}</td>
+    <td>{{ student.email }}</td>
+    <td>{{ student.roll_number }}</td>
+    <td>
+        {{ student.issued_books 
+        | selectattr('status', 'equalto', StatusType.ACTIVE) 
+        | list | length }}
+    </td>
+    <td>₹{{ student.fines | sum(attribute='amount') }}</td>
+    <td>
+        <a href="{{ url_for('student_detail', student_id=student.id) }}"
+        class="btn btn-sm btn-primary">
+        View Details
+        </a>
+    </td>
+    <td>
+        {% if not student.is_approved %}
+        <form action="{{ url_for('approve_student', student_id=student.id) }}" 
+                method="POST" style="display:inline">
+            <button class="btn btn-success btn-sm">Approve</button>
+        </form>
+        <span class="badge bg-warning text-dark">Pending</span>
+        {% else %}
+        <span class="badge bg-success">Active</span>
+        {% endif %}
+    </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    </div>
+</div>
+
+        <script>
+        // Step 1 — find the input box and the table
+        const searchInput = document.getElementById('searchInput');
+        const table       = document.getElementById('studentsTable');
+
+        // Step 2 — listen for every keystroke in the search box
+        searchInput.addEventListener('keyup', function() {
+
+            // get what the user typed, convert to lowercase for comparison
+            const searchText = searchInput.value.toLowerCase();
+
+            // get all rows inside <tbody> only (not the header row)
+            const rows = table.querySelectorAll('tbody tr');
+
+            // loop through every row
+            rows.forEach(row => {
+
+            // get all text content inside this row, lowercase it
+            const rowText = row.textContent.toLowerCase();
+
+            // if row contains the search text → show it
+            // if not → hide it
+            if (rowText.includes(searchText)) {
+                row.style.display = '';       // show row
+            } else {
+                row.style.display = 'none';   // hide row
+            }
+            });
+        });
+        </script>
+{% endblock %}

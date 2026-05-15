@@ -1,0 +1,87 @@
+{% extends 'base_admin.html' %}
+{% block title %}Student Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!-- Student Info Card -->
+  <div class="card mb-4 p-3">
+    <h4>{{ student.name }}</h4>
+    <p class="mb-1">Email: {{ student.email }}</p>
+    <p class="mb-0">Roll No: {{ student.roll_number }}</p>
+  </div>
+
+  <!-- Issued Books -->
+  <h5>Issued Books</h5>
+  <div class="table-responsive">
+<table class="table table-bordered mb-4">
+    <thead class="table-dark">
+      <tr>
+        <th>Book</th>
+        <th>Issue Date</th>
+        <th>Due Date</th>
+        <th>Return Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in student.issued_books %}
+      <tr>
+        <td>{{ record.book.title }}</td>
+        <td>{{ record.issue_date.strftime('%d %b %Y') }}</td>
+        <td>{{ record.due_date.strftime('%d %b %Y') }}</td>
+        <td>
+          {% if record.return_date %}
+            {{ record.return_date.strftime('%d %b %Y') }}
+          {% else %}
+            Not returned
+          {% endif %}
+        </td>
+        <td>
+          {% if record.status.value == 'issued' %}
+            <span class="badge bg-success">Issued</span>
+          {% else %}
+            <span class="badge bg-secondary">Returned</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+  <!-- Fines -->
+  <h5>Fines</h5>
+  <div class="table-responsive">
+<table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Book</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fine in student.fines %}
+      <tr>
+        <td>{{ fine.issued_book.book.title }}</td>
+        <td>₹{{ fine.amount }}</td>
+        <td>
+          {% if fine.paid %}
+            <span class="badge bg-success">Paid</span>
+          {% else %}
+            <span class="badge bg-danger">Unpaid</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+  <a href="{{ url_for('manage_students') }}" class="btn btn-secondary mt-2">
+    Back to Students
+  </a>
+
+</div>
+{% endblock %}

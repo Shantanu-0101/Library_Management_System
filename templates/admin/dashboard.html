@@ -1,0 +1,180 @@
+{% extends 'base_admin.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="ad-wrapper">
+
+  <p class="ad-title">Admin Dashboard</p>
+  <p class="ad-sub">Library overview — all stats at a glance</p>
+
+  <!-- Stat Cards -->
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 mb-4">
+    <div class="col">
+      <div class="stat-card">
+        <p class="lbl">Total Books</p>
+        <p class="val c-blue">{{ total_books }}</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stat-card">
+        <p class="lbl">Students</p>
+        <p class="val c-green">{{ total_students }}</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stat-card">
+        <p class="lbl">Active Issues</p>
+        <p class="val c-amber">{{ total_issued }}</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stat-card">
+        <p class="lbl">Overdue</p>
+        <p class="val c-red">{{ overdue_count }}</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stat-card">
+        <p class="lbl">Unpaid Fines</p>
+        <p class="val c-red">₹{{ unpaid_fines }}</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stat-card">
+        <p class="lbl">Collected</p>
+        <p class="val c-purple">₹{{ total_fines - unpaid_fines }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="ad-section">
+    <h3>Quick actions</h3>
+    <div class="quick-grid">
+      <a href="{{ url_for('add_books') }}" class="qb">
+        Add Book
+        <span>Add new book to library</span>
+      </a>
+      <a href="{{ url_for('manage_book') }}" class="qb">
+        Manage Books
+        <span>Edit or delete books</span>
+      </a>
+      <a href="{{ url_for('manage_students') }}" class="qb">
+        Students
+        <span>View all students</span>
+      </a>
+      <a href="{{ url_for('admin_issued') }}" class="qb">
+        Issued Books
+        <span>Track all issues</span>
+      </a>
+      <a href="{{ url_for('admin_fines') }}" class="qb">
+        Fines
+        <span>Manage fines</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+    <div class="charts-row">
+
+    <!-- Chart 1 - Books per Category -->
+    <div class="chart-card">
+        <h3>Books by category</h3>
+        <canvas id="categoryChart" height="110"></canvas>
+    </div>
+
+    <!-- Chart 2 - Fines paid vs unpaid -->
+    <div class="chart-card">
+        <h3>Fines overview</h3>
+        <canvas id="finesChart" height="110"></canvas>
+    </div>
+
+    </div>
+
+  <!-- Recent Activity -->
+  <div class="ad-section">
+    <h3>Recent activity</h3>
+    <div class="table-responsive">
+<table class="ad-table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Book</th>
+          <th>Issue Date</th>
+          <th>Due Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in recent_issued %}
+        <tr>
+          <td>{{ record.student.name }}</td>
+          <td>{{ record.book.title }}</td>
+          <td>{{ record.issue_date.strftime('%d %b %Y') }}</td>
+          <td>{{ record.due_date.strftime('%d %b %Y') }}</td>
+          <td>
+            {% if record.status.value == 'issued' %}
+              {% if record.due_date.replace(tzinfo=none) < now.replace(tzinfo=none) %}
+                <span class="badge-over">Overdue</span>
+              {% else %}
+                <span class="badge-active">Active</span>
+              {% endif %}
+            {% else %}
+              <span class="badge-ret">Returned</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+  </div>
+
+</div>
+
+    <script>
+    // Chart 1 — Books by Category (Bar chart)
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+
+        new Chart(categoryCtx, {
+            type: 'bar',
+            data: {
+            // Jinja passes Python lists directly into JS here
+            labels:   {{ category_names  | tojson }},
+            datasets: [{
+                label:           'Books',
+                data:            {{ category_counts | tojson }},
+                backgroundColor: '#1a73e8',
+                borderRadius:    6,
+            }]
+            },
+            options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales:  { y: { beginAtZero: true } },
+            maintainAspectRatio: false,
+            }
+        });
+
+
+        // Chart 2 — Fines Paid vs Unpaid (Doughnut chart)
+        const finesCtx = document.getElementById('finesChart').getContext('2d');
+
+        new Chart(finesCtx, {
+            type: 'doughnut',
+            data: {
+            labels: ['Paid', 'Unpaid'],
+            datasets: [{
+                data:            [{{ total_fines - unpaid_fines }}, {{ unpaid_fines }}],
+                backgroundColor: ['#16a34a', '#dc2626'],
+                borderWidth:     0,
+            }]
+            },
+            options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } },
+            maintainAspectRatio: false,
+            }
+        });
+    </script>
+{% endblock %}

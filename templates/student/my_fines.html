@@ -1,0 +1,62 @@
+{% extends 'base_student.html' %}
+{% block title %}My Fines{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  
+  {% if fines %}
+  <h3>My Fines</h3>
+  <div class="table-responsive">
+<table class="table table-bordered mt-3">
+    <thead class="table-dark">
+      <tr>
+        <th>Book Title</th>
+        <th>Issue Date</th>
+        <th>Due Date</th>
+        <th>Return Date</th>
+        <th>Overdue Days</th>
+        <th>Fine Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fine in fines %}
+      <tr>
+        <td>{{ fine.issued_book.book.title }}</td>
+        <td>{{ fine.issued_book.issue_date.strftime('%d %b %Y') }}</td>
+        <td>{{ fine.issued_book.due_date.strftime('%d %b %Y') }}</td>
+        <td>{{ fine.issued_book.return_date.strftime('%d %b %Y') }}</td>
+        <td>
+          {{ (fine.issued_book.return_date - fine.issued_book.due_date).days }} days
+        </td>
+        <td>₹{{ fine.amount }}</td>
+        <td>
+          {% if fine.paid %}
+            <span class="badge bg-success">Paid</span>
+          {% else %}
+            <span class="badge bg-danger">Unpaid</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+  <!-- Total unpaid summary -->
+  <div class="mt-3">
+    <strong>Total Unpaid Fine: 
+      ₹{{ fines | selectattr('paid', 'equalto', False) 
+               | sum(attribute='amount') }}
+    </strong>
+  </div>
+
+  {% else %}
+  <div class="d-flex justify-content-center">
+    <h5 class="text-muted mt-5">You have no fines. Keep returning books on time!</h5>
+  </div>
+  
+  {% endif %}
+
+</div>
+{% endblock %}

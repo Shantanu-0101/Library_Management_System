@@ -1,0 +1,39 @@
+{% extends 'base_student.html' %}
+{% block title %}My Books{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3>My Issued Books</h3>
+
+  {% if issued %}
+  <div class="table-responsive">
+<table class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Issue Date</th>
+        <th>Due Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in issued %}
+      <tr class="{{ 'table-danger' if record.due_date < now else '' }}">
+        <td>{{ record.book.title }}</td>
+        <td>{{ record.book.author }}</td>
+        <td>{{ record.issue_date.strftime('%d %b %Y') }}</td>
+        <td>{{ record.due_date.strftime('%d %b %Y') }}</td>
+        <td><span class="badge bg-success">Issued</span></td>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+  {% else %}
+    <p class="text-muted mt-3">You have not issued any books yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

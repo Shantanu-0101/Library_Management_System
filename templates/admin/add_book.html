@@ -1,0 +1,61 @@
+{% extends 'base_admin.html' %}
+{% block title %}Manage-Books{% endblock %}
+
+{% block content %}
+
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="POST" enctype="multipart/form-data">
+                
+                    <div class="mb-3">
+                        <label for="Book-Title" class="form-label">Book Title:</label>
+                        <input type="text" class="form-control" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Book-Author" class="form-label">Book Author:</label>
+                        <input type="text" class="form-control" name="author">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ISBN" class="form-label">ISBN:</label>
+                        <input type="text" class="form-control" name="isbn" placeholder="ISBN XXX-X-XX-XXXXXX-X">
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category:</label>
+                        <input type="text" class="form-control" name="category_id" placeholder="e.g. Machine Learning">
+                    </div>
+                    <div class="mb-3">
+                        <label for="copies" class="form-label">Available Copies:</label>
+                        <input type="text" class="form-control" name="total_copies" placeholder="e.g. 10">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cover_image" class="form-label">Upload Book Image:</label>
+                        <input class="form-control" type="file" name="cover_image">
+                    </div>
+
+                    <div class=" gap-2 d-md-flex justify-content-end md-4 ">
+                        <button id='mybtn' class="btn btn-success me-md-2" type="submit">Add</button>
+                    </div> 
+                </form>
+            </div>
+
+            <!-- Bulk Upload option -->
+            <div class="col-md-6">
+                <div class="upload-card mt-4">
+                <div class="upload-card-header">
+                    <span class="upload-title">Bulk Upload via Excel</span>
+                    <a href="/admin/books/template" class="template-link">Download Template</a>
+                </div>
+                <form method="POST" action="/admin/books/upload" enctype="multipart/form-data">
+                    <input type="file" name="excel_file" accept=".xlsx" class="upload-input">
+                    <button type="submit" class="upload-btn">Upload</button>
+                    <a class="btn btn-danger" href="/manage_books" role="button">Cancel</a>
+                </form>
+                </div>
+            </div>
+        </div> 
+    </div> 
+
+    
+
+{% endblock %}

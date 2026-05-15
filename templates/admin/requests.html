@@ -1,0 +1,114 @@
+{% extends 'base_admin.html' %}
+{% block title %}Book Requests{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <h3>Book Issue Requests</h3>
+
+  <!-- Pending -->
+  <h5 class="mt-4">Pending 
+    <span class="badge bg-warning text-dark">{{ pending | length }}</span>
+  </h5>
+
+  {% if pending %}
+  <div class="table-responsive">
+  <table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Student</th>
+        <th>Roll No</th>
+        <th>Book</th>
+        <th>Available Copies</th>
+        <th>Requested On</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in pending %}
+      <tr>
+        <td>{{ req.student.name }}</td>
+        <td>{{ req.student.roll_number }}</td>
+        <td>{{ req.book.title }}</td>
+        <td>{{ req.book.available_copies }}</td>
+        <td>{{ req.created_at.strftime('%d %b %Y') }}</td>
+        <td>
+          <form action="{{ url_for('approve_request', request_id=req.id) }}"
+                method="POST" style="display:inline">
+            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+          </form>
+          <form action="{{ url_for('reject_request', request_id=req.id) }}"
+                method="POST" style="display:inline">
+            <select name="reason" class="form-select form-select-sm d-inline w-auto">
+              <option value="Book already reserved">Book already reserved</option>
+              <option value="Student fine pending">Student fine pending</option>
+              <option value="Limit of 3 books reached">Can not issue book for while</option>
+              <option value="Book under maintenance">Book under maintenance</option>
+              <option value="Other">Other</option>
+            </select>
+            <button type="submit" class="btn btn-danger btn-sm ms-1">Reject</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+    <p class="text-muted">No pending requests.</p>
+  {% endif %}
+
+
+  <!-- Approved -->
+  <h5 class="mt-4">Approved
+    <span class="badge bg-success">{{ approved | length }}</span>
+  </h5>
+  {% if approved %}
+  <div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Student</th><th>Book</th><th>Requested On</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in approved %}
+      <tr>
+        <td>{{ req.student.name }}</td>
+        <td>{{ req.book.title }}</td>
+        <td>{{ req.created_at.strftime('%d %b %Y') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+
+
+  <!-- Rejected -->
+  <h5 class="mt-4">Rejected
+    <span class="badge bg-danger">{{ rejected | length }}</span>
+  </h5>
+  {% if rejected %}
+  <div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Student</th><th>Book</th><th>Requested On</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in rejected %}
+      <tr>
+        <td>{{ req.student.name }}</td>
+        <td>{{ req.book.title }}</td>
+        <td>{{ req.created_at.strftime('%d %b %Y') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

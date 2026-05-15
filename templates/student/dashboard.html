@@ -1,0 +1,123 @@
+{% extends 'base_student.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="db-wrapper">
+
+  <!-- Greeting -->
+  <div class="db-greeting">
+    <h2>Hello, {{ student_name }}...!</h2>
+    <p>Here's a summary of your library activity.</p>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="db-stats">
+    <div class="stat-card">
+      <p class="stat-label">Books Issued</p>
+      <p class="stat-value stat-blue">{{ active_books | length }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Books Returned</p>
+      <p class="stat-value stat-green">{{ returned_count }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Due Soon</p>
+      <p class="stat-value stat-amber">{{ due_soon_count }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Unpaid Fines</p>
+      <p class="stat-value stat-red">₹{{ unpaid_fine }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Total Fines</p>
+      <p class="stat-value stat-purple">₹{{ total_fine }}</p>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="db-section">
+    <h3>Quick links</h3>
+    <div class="quick-links">
+      <a href="/student/browse_books" class="ql-card">
+        <div class="ql-icon ql-blue">📚</div>
+        <div class="ql-text">
+          <p>Browse Books</p>
+          <span>Find and issue books</span>
+        </div>
+      </a>
+      <a href="/student/my_issued_books" class="ql-card">
+        <div class="ql-icon ql-green">📖</div>
+        <div class="ql-text">
+          <p>My Books</p>
+          <span>View issued books</span>
+        </div>
+      </a>
+      <a href="/student/my_fines" class="ql-card">
+        <div class="ql-icon ql-red">💸</div>
+        <div class="ql-text">
+          <p>My Fines</p>
+          <span>₹{{ unpaid_fine }} unpaid</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- announcements -->
+  <div class="db-section">
+    <h3>Notifications</h3>
+    {% if notifications %}
+      {% for notif in notifications | reverse %}
+      <div class="notif-card">
+        <p class="notif-title">{{ notif.title }}</p>
+        <p class="notif-msg">{{ notif.message }}</p>
+        <span class="notif-date">
+          {{ notif.created_at.strftime('%d %b %Y') }}
+        </span>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">No notifications yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- Currently Issued Books Table -->
+  <div class="db-section">
+    <h3>Currently issued books</h3>
+    {% if active_books %}
+    <div class="table-responsive">
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Author</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in active_books %}
+          {% set today = now %}
+          <tr>
+            <td>{{ record.book.title }}</td>
+            <td>{{ record.book.author }}</td>
+            <td>{{ record.issue_date.strftime('%d %b %Y') }}</td>
+            <td>{{ record.due_date.strftime('%d %b %Y') }}</td>
+            <td>
+              {% if (record.due_date - today).days <= 3 %} <span class="badge-warn">Due soon</span>
+                {% else %}
+                <span class="badge-ok">On time</span>
+                {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted">You have no books currently issued.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

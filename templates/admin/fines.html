@@ -1,0 +1,90 @@
+{% extends 'base_admin.html' %}
+{% block title %}Fines{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <h3>Fines Management</h3>
+
+  <!-- Summary Cards -->
+  <div class="row mt-3 mb-4">
+    <div class="col-md-3">
+      <div class="card text-center p-3">
+        <p class="text-muted mb-1" style="font-size:13px;">Total Fines</p>
+        <h4 class="mb-0">{{ fines | length }}</h4>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center p-3">
+        <p class="text-muted mb-1" style="font-size:13px;">Unpaid</p>
+        <h4 class="mb-0 text-danger">₹{{ total_unpaid }}</h4>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center p-3">
+        <p class="text-muted mb-1" style="font-size:13px;">Collected</p>
+        <h4 class="mb-0 text-success">₹{{ total_collected }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="mb-3">
+    <a href="{{ url_for('admin_fines') }}" 
+       class="btn btn-sm btn-dark me-1">All</a>
+    <a href="{{ url_for('admin_fines', filter='unpaid') }}" 
+       class="btn btn-sm btn-outline-danger me-1">Unpaid</a>
+    <a href="{{ url_for('admin_fines', filter='paid') }}" 
+       class="btn btn-sm btn-outline-success">Paid</a>
+  </div>
+
+  <div class="table-responsive">
+<table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Student</th>
+        <th>Roll No</th>
+        <th>Book</th>
+        <th>Days Overdue</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fine in fines %}
+      <tr>
+        <td>{{ fine.student.name }}</td>
+        <td>{{ fine.student.roll_number }}</td>
+        <td>{{ fine.issued_book.book.title }}</td>
+        <td>
+          {{ (fine.issued_book.return_date - fine.issued_book.due_date).days }} days
+        </td>
+        <td>₹{{ fine.amount }}</td>
+        <td>
+          {% if fine.paid %}
+            <span class="badge bg-success">Paid</span>
+          {% else %}
+            <span class="badge bg-danger">Unpaid</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if not fine.paid %}
+          <form action="{{ url_for('mark_paid', fine_id=fine.id) }}" method="POST">
+            <button type="submit" class="btn btn-sm btn-success"
+                    onclick="return confirm('Mark this fine as paid?')">
+              Mark Paid
+            </button>
+          </form>
+          {% else %}
+            <span class="text-muted" style="font-size:13px;">Done</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</div>
+{% endblock %}

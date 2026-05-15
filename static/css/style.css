@@ -1,0 +1,685 @@
+/* ─ Global ─ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+a { text-decoration: none; color: inherit; }
+
+
+/* ─ Student Navbar ─*/
+.student-body { background: #f8faff; }
+
+.student-nav {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 36px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 60px;
+}
+
+.nav-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a73e8;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-links a {
+  font-size: 14px;
+  color: #555;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: #1a73e8; }
+
+.nav-user {
+  font-size: 13px;
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+.btn-nav-outline {
+  border: 1px solid #1a73e8 !important;
+  color: #1a73e8 !important;
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 13px;
+}
+
+.btn-nav-fill {
+  background: #1a73e8;
+  color: #fff !important;
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 13px;
+}
+
+.btn-nav-fill:hover { background: #1558b0; color: #fff !important; }
+
+
+/* ─Admin Navbar ─*/
+.admin-body { background: #f5f5f5; }
+
+.admin-nav {
+  background: #1e1e2e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 36px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.admin-logo span { color: #f59e0b; }
+
+.admin-nav .nav-links a {
+  font-size: 14px;
+  color: #aaa;
+  transition: color 0.2s;
+}
+
+.admin-nav .nav-links a:hover { color: #fff; }
+
+.btn-admin-outline {
+  border: 1px solid #f59e0b !important;
+  color: #f59e0b !important;
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 13px;
+}
+
+/* ─ Auth Card (shared for login & signup) ─ */
+.auth-card {
+  width: 100%;
+  max-width: 360px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.auth-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: #1a1a1a;
+}
+
+.auth-card .subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 0 0 1.5rem;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.auth-card input:focus { border-color: #1a73e8; }
+
+/* Student submit button */
+.auth-card .btn-student {
+  width: 100%;
+  padding: 10px;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-card .btn-student:hover { background: #1558b0; }
+
+/* Admin submit button */
+.auth-card .btn-admin {
+  width: 100%;
+  padding: 10px;
+  background: #1e1e2e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.auth-card .btn-admin:hover { background: #2d2d44; }
+
+.auth-card .switch-link {
+  font-size: 13px;
+  color: #888;
+  margin: 1.25rem 0 0;
+  text-align: center;
+}
+
+.auth-card .switch-link a { color: #1a73e8; font-weight: 500; }
+
+.auth-card .error-msg {
+  font-size: 13px;
+  color: #c0392b;
+  background: #fdf0f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+
+/* ─ Excel Upload Card ─ */
+.upload-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.upload-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.template-link {
+  font-size: 12px;
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.template-link:hover { text-decoration: underline; }
+
+.upload-card form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-input {
+  flex: 1;
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  outline: none;
+  color: #444;
+}
+
+.upload-input:focus { border-color: #1a73e8; }
+
+.upload-btn {
+  padding: 7px 18px;
+  background: #1e1e2e;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.upload-btn:hover { background: #2d2d44; }
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  margin-bottom: 20px;
+}
+
+/* Hover effect */
+.card:hover {
+  transform: translateY(-5px);
+  
+}
+
+/* student browse books section start */
+
+.browse-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 5px;
+  padding-bottom: 1px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  margin-bottom: 10px;
+}
+
+/* Hover effect */
+.browse-card:hover {
+  transform: translateY(-5px);
+  
+}
+
+/* browse books section end */
+
+/* ─ Dashboard ─ */
+.db-wrapper {
+  padding: 32px 36px;
+  background: #f8faff;
+  min-height: 100vh;
+}
+
+.db-greeting { margin-bottom: 28px; }
+.db-greeting h2 { font-size: 24px; font-weight: 600; color: #1a1a1a; margin: 0 0 4px; }
+.db-greeting p  { font-size: 14px; color: #888; margin: 0; }
+
+.db-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.stat-label { font-size: 12px; color: #888; margin: 0 0 6px; }
+.stat-value { font-size: 28px; font-weight: 600; margin: 0; }
+.stat-blue   { color: #1a73e8; }
+.stat-green  { color: #16a34a; }
+.stat-amber  { color: #b45309; }
+.stat-red    { color: #dc2626; }
+.stat-purple { color: #7c3aed; }
+
+.db-section { margin-bottom: 28px; }
+.db-section h3 { font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 0 0 12px; }
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.ql-card {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+
+.ql-card:hover { border-color: #1a73e8; }
+
+.ql-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.ql-blue   { background: #e8f0fe; }
+.ql-green  { background: #dcfce7; }
+.ql-red    { background: #fee2e2; }
+
+.ql-text p    { margin: 0; font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.ql-text span { font-size: 11px; color: #888; }
+
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 0.5px solid #e0e0e0;
+}
+
+.db-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: #888;
+  font-weight: 500;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+}
+
+.db-table td {
+  padding: 10px 14px;
+  border-bottom: 0.5px solid #f0f0f0;
+  color: #1a1a1a;
+}
+
+.badge-warn {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.badge-ok {
+  background: #dcfce7;
+  color: #166534;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+/* student dashboard end */
+
+.student-nav img {
+  height: 60px; 
+  margin-bottom: 5px;
+  margin-left: 10px;/* Adjust this value to your preferred size */
+  /* Ensures it doesn't exceed navbar height */
+   /* Maintains aspect ratio */
+
+}
+
+/* ─ Admin Dashboard ─ */
+.ad-wrapper {
+  padding: 32px 36px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.ad-title { font-size: 22px; font-weight: 600; color: #1a1a1a; margin: 0 0 4px; }
+.ad-sub   { font-size: 14px; color: #888; margin: 0 0 28px; }
+
+.ad-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.ad-card {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.ad-card .lbl { font-size: 12px; color: #888; margin: 0 0 6px; }
+.ad-card .val { font-size: 28px; font-weight: 600; margin: 0; }
+
+.c-blue   { color: #1a73e8; }
+.c-green  { color: #16a34a; }
+.c-amber  { color: #b45309; }
+.c-red    { color: #dc2626; }
+.c-purple { color: #7c3aed; }
+
+.ad-section { margin-bottom: 28px; }
+.ad-section h3 { font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 0 0 12px; }
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.qb {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.2s;
+}
+
+.qb:hover { border-color: #1e1e2e; color: #1a1a1a; }
+.qb span  { display: block; font-size: 12px; color: #888; margin-top: 3px; font-weight: 400; }
+
+.ad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 0.5px solid #e0e0e0;
+}
+
+.ad-table th {
+  padding: 10px 14px;
+  text-align: left;
+  color: #888;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.ad-table td { padding: 10px 14px; border-bottom: 0.5px solid #f0f0f0; }
+
+.badge-active { background: #dcfce7; color: #166534; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+.badge-ret    { background: #f3f4f6; color: #555;    padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+.badge-over   { background: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+
+
+/* ─ Active nav link — Admin ─ */
+.admin-nav .nav-active {
+  color: #f59e0b !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid #f59e0b;
+  padding-bottom: 2px;
+}
+
+/* ─ Active nav link — Student ─ */
+.student-nav .nav-active {
+  color: #1a73e8 !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid #1a73e8;
+  padding-bottom: 2px;
+}
+
+/* ─ Search Box ─ */
+.search-box {
+  margin-bottom: 16px;
+}
+
+.search-box input {
+  width: 100%;
+  max-width: 380px;
+  padding: 9px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.search-box input:focus {
+  border-color: #1e1e2e;
+}
+
+/* student search box end */
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.chart-card {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 30px;
+  height: 280px;
+}
+
+.chart-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 16px;
+}
+
+.chart-card canvas {
+  flex: 1;
+}
+
+/* ─ Responsive ─ */
+@media (max-width: 991px) {
+  .db-wrapper, .ad-wrapper {
+    padding: 16px 20px;
+  }
+  
+  .student-nav, .admin-nav {
+    padding: 12px 20px;
+    height: auto;
+  }
+  
+  .nav-links {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 10px;
+  }
+  
+  .nav-links a, .nav-user {
+    padding: 8px 0;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+  
+  .btn-nav-outline, .btn-nav-fill, .btn-admin-outline {
+    width: auto;
+    display: inline-block;
+    margin: 0 auto;
+  }
+
+  .admin-logo {
+    font-size: 18px;
+  }
+}
+
+/* book counter */
+.book-counter-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.book-counter {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid #1a73e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: #e8f0fe;
+}
+
+.counter-full {
+  border-color: #dc2626;
+  background: #fee2e2;
+}
+
+.counter-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.counter-den {
+  font-size: 14px;
+  color: #888;
+  align-self: flex-end;
+  margin-bottom: 8px;
+}
+
+.counter-label {
+  font-size: 13px;
+  color: #888;
+  margin-top: 6px;
+}
+/* book counter */
+
+
+/* announcements section */
+.notif-card {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-left: 3px solid #1a73e8;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+
+.notif-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px;
+}
+
+.notif-msg {
+  font-size: 13px;
+  color: #555;
+  margin: 0 0 6px;
+}
+
+.notif-date {
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* announcement end */
+
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

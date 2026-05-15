@@ -1,0 +1,45 @@
+{% extends 'base_admin.html' %}
+{% block title %}Edit-Books{% endblock %}
+
+{% block content %}
+
+    <form method="POST" action="/admin/books/edit/{{ book.id }}/" enctype="multipart/form-data">
+        <div class="container pt-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label for="Book-Title" class="form-label">Book Title:</label>
+                        <input type="text" name="title" value="{{ book.title }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Book-Author" class="form-label">Book Author:</label>
+                        <input type="text" name="author" value="{{ book.author }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ISBN" class="form-label">ISBN:</label>
+                        <input type="text" name="isbn" value="{{ book.isbn }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category:</label>
+                        <input type="text" name="category" value="{{ book.category_id }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="available_copies" class="form-label">Available Copies:</label>
+                        <input type="number" name="available_copies" value="{{ book.available_copies }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cover_image" class="form-label">Upload Book Image:</label>
+                        <input type="file" name="cover_image" class="form-control">
+                    </div>
+
+                    <div class=" gap-2 d-md-flex justify-content-end md-4 ">
+                        <a class="btn btn-danger" href="/manage_books" role="button">Cancel</a>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </div>
+            </div> 
+        </div>   
+    </form>
+
+
+{% endblock %}

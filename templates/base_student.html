@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Library{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="student-body">
+
+  <nav class="navbar navbar-expand-lg navbar-light student-nav">
+    <div class="container-fluid px-0">
+      <a class="navbar-brand p-0" href="/student/dashboard">
+        <img src="{{ url_for('static', filename='images/image.png') }}" alt="college">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studentNavbar" aria-controls="studentNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="studentNavbar">
+        <div class="navbar-nav nav-links align-items-lg-center">
+          {% if session.get('student_id') %}
+            <a href="/student/dashboard" class="nav-link student-nav-link">Dashboard</a>
+            <a href="/student/browse_books" class="nav-link student-nav-link">Browse Books</a>
+            <a href="/student/my_issued_books" class="nav-link student-nav-link">My Issued Books</a>
+            <a href="/student/my_fines" class="nav-link student-nav-link">My Fines</a>
+            <a href="/student/suggest_book" class="student-nav-link">Request New Book</a>
+            <span class="nav-user ms-lg-3 mt-2 mt-lg-0">{{ session.get('student_name') }}</span>
+            <a href="/logout" class="btn-nav-outline ms-lg-3 mt-2 mt-lg-0">Logout</a>
+          {% else %}
+            <a href="/student/login" class="nav-link">Login</a>
+            <a href="/student/signup" class="btn-nav-fill ms-lg-3 mt-2 mt-lg-0">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.student-nav-link');
+
+    navLinks.forEach(link => {
+      if (currentPath === link.getAttribute('href')) {
+        link.classList.add('nav-active');
+      }
+    });
+  </script>
+</body>
+</html>
