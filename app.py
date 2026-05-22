@@ -149,74 +149,6 @@ def download_template():
     return send_file(stream, as_attachment=True,
                      download_name='books_template.xlsx',
                      mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-
-
-# Excel upload
-# @app.route('/admin/books/upload', methods=['POST'])
-# def upload_books():
-#     if session.get('role') != 'admin':
-#         return redirect(url_for('admin_login'))
-
-#     file = request.files.get('excel_file')
-#     if not file or file.filename == '':
-#         return redirect(url_for('manage_book'))
-
-#     wb = openpyxl.load_workbook(file)
-#     ws = wb.active
-
-#     added = 0
-
-
-#     for row in ws.iter_rows(min_row=2, values_only=True):
-#         title  = row[0]
-#         author = row[1] if row[1] else 'Unknown'
-#         total_copies = row[2]
-
-#         print(f"Processing: {title}")   # ← add this
-
-#         if not title:
-#             print("SKIPPED - no title")  # ← add this
-#             continue
-
-#         print(f"Adding: {title}")
-
-#         isbn = f"LIB{str(added + 1).zfill(5)}"
-#         category_name = 'General'
-#         cover_image   = None
-
-#         if not title:        # skip empty rows
-#             continue
-
-#         if Books.query.filter_by(title=str(title).strip()).first():
-#             continue
-
-#         category = Category.query.filter_by(name=category_name).first()
-#         if not category:
-#             category = Category(name=category_name)
-#             db.session.add(category)
-#             db.session.flush()
-
-#         new_book = Books(
-#             title=str(title),
-#             author=str(author),
-#             isbn=str(isbn),
-#             category_id=category.id,
-#             total_copies=int(total_copies or 1),
-#             available_copies=int(total_copies or 1),
-#             cover_image=str(cover_image) if cover_image else None
-#         )
-#         db.session.add(new_book)
-#         added += 1
-
-#     try:
-#         db.session.commit()
-#         print(f"SUCCESS: {added} books added")
-#     except Exception as e:
-#         db.session.rollback()
-#         print(f"ERROR: {e}")
-#         return f"Upload failed: {e}"
-#     return redirect(url_for('manage_book',success=f"{added} books added"))
-
 # excel Upload
 @app.route('/admin/books/upload', methods=['POST'])
 def upload_books():
@@ -464,11 +396,14 @@ def my_books():
     # fetch only ACTIVE issued books for this student
     # also join with Books so we can show title, author in template
     issued = Issued_books.query.filter_by(
-        user_id=student_id,
-        status=StatusType.ACTIVE
+        user_id=student_id
     ).all()
 
-    return render_template('student/my_issued_books.html', issued=issued, now = datetime.now())
+    requests = IssueRequest.query.filter_by(
+        student_id=session.get('student_id')
+    ).order_by(IssueRequest.created_at.desc()).all()
+
+    return render_template('student/my_issued_books.html', issued= issued, now = datetime.now(), requests = requests)
 
 
 # Return Book 
@@ -697,18 +632,6 @@ def approve_student(student_id):
     db.session.commit()
     return redirect(url_for('manage_students'))
 
-# student request section
-@app.route('/student/my_requests')
-def my_requests():
-    if session.get('role') != 'student':
-        return redirect(url_for('student_login'))
-
-    requests = IssueRequest.query.filter_by(
-        student_id=session.get('student_id')
-    ).order_by(IssueRequest.created_at.desc()).all()
-
-    return render_template('student/my_requests.html', requests=requests)
-
 
 # Admin post notification
 @app.route('/admin/notifications', methods=['GET', 'POST'])
@@ -775,5 +698,7 @@ def admin_suggestions():
     ).all()
     return render_template('admin/suggestions.html', suggestions=suggestions)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
+
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=5000)

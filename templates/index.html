@@ -2,15 +2,22 @@
 {% block title %}CSMSS Library Portal{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column align-items-center justify-content-center py-5" style="min-height: 80vh;">
+<div class="d-flex flex-column align-items-center justify-content-center py-5" style="
+  background-image: url({{ url_for('static', filename='images/college.jpg')}}); center/cover no-repeat; position: relative;">
+
+  <div style="
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+  "></div>
 
   <h1 style="font-size:26px; font-weight:600; color:#1a1a1a; margin-bottom:6px;">
-    CSMSS AIDS Department Library Portal
+    AIDS Dept. Library Portal
   </h1>
   <p style="font-size:14px; color:#888; margin-bottom:2.5rem;">
   </p>
 
-  <div class="d-flex gap-4 flex-wrap justify-content-center">
+  <div class="d-flex gap-4 flex-wrap justify-content-center" style="position: relative; z-index: 2;">
 
     <div class="auth-card">
       <h2>Student Portal</h2>

@@ -12,32 +12,39 @@
   <p class="counter-label">Books Issued</p>
 </div>
 
-<div class="container">
+<div id="booksContainer" class="container">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search any Book...">
+    </div> 
+
+<div id="searchInput"  class="row g-3">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
         {% for book in books | reverse %}
-            <div class="col">
-                <div class="browse-card" h-100 style="width: 15rem;">
-                    {% if book.cover_image %}
-                    <img src="{{ url_for('static', filename='images/' + book.cover_image) }}" class="card-img-top" alt="" style="height: 180px; object-fit: cover;">
-                    {% else %}
-                    <img src="{{ url_for('static', filename='images/default.jpg') }}" class="card-img-top" alt="" style="height: 180px; object-fit: cover;">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">&nbsp;&nbsp;&nbsp;{{ book.title }}</h5>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="browse-card" >
+                    <div class="mt-auto">
+                        {% if book.cover_image %}
+                        <img src="{{ url_for('static', filename='images/' + book.cover_image) }}" class="card-img-top" alt="" style="height: 180px; object-fit: cover; width: 100%;">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/default.jpg') }}" class="card-img-top" alt="" style="height: 180px; object-fit: cover; width: 100%;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">&nbsp;&nbsp;&nbsp;{{ book.title }}</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-truncate">Author: {{ book.author }}</li>
+                            <li class="list-group-item">Available copies : {{ book.available_copies }}</li>
+                        </ul>
+                        {% if book.available_copies > 0 %}
+                            <form action="{{ url_for('request_issue', book_id=book.id) }}" method="POST">
+                            <button type="submit" class="btn btn-primary btn-sm mt-1">
+                                Request Issue
+                            </button>
+                            </form>
+                        {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>Not Available</button>
+                        {% endif %}
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item text-truncate">Author: {{ book.author }}</li>
-                        <li class="list-group-item">Available copies : {{ book.available_copies }}</li>
-                    </ul>
-                    {% if book.available_copies > 0 %}
-                        <form action="{{ url_for('request_issue', book_id=book.id) }}" method="POST">
-                        <button type="submit" class="btn btn-primary btn-sm mt-1">
-                            Request Issue
-                        </button>
-                        </form>
-                    {% else %}
-                        <button class="btn btn-secondary btn-sm" disabled>Not Available</button>
-                    {% endif %}
                     <!-- Show error messages from redirect -->
                     {% if request.args.get('book_id') and request.args.get('book_id')|int == book.id %}
                         {% if request.args.get('error') == 'already_issued' %}
@@ -80,6 +87,25 @@
         // remove from DOM after fade finishes
         setTimeout(() => alert.remove(), 500);
         }, 3000);
+    });
+    </script>
+
+    <script>
+    const bookSearch   = document.getElementById('searchInput');
+    const bookCards    = document.querySelectorAll('#booksContainer .col-md-4');
+
+    bookSearch.addEventListener('keyup', function() {
+        const searchText = bookSearch.value.toLowerCase();
+
+        bookCards.forEach(card => {
+        const cardText = card.textContent.toLowerCase();
+
+        if (cardText.includes(searchText)) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+        });
     });
     </script>
 

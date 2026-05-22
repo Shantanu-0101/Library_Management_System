@@ -1,9 +1,16 @@
 {% extends 'base_student.html' %}
 {% block title %}Student Login{% endblock %}
 
+
 {% block content %}
-<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh;">
-  <div class="auth-card">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh;" style="background-image: url('{{ url_for('static', filename='images/college.jpg') }}'); center/cover no-repeat; min-height: 85vh; display: flex; align-items: center; justify-content: center; position: relative;">
+    <div style="
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+  "></div>
+
+  <div class="auth-card" style="position: relative; z-index: 2;">
     <h2>Student Login</h2>
     <p class="subtitle">Access your library account.</p>
 

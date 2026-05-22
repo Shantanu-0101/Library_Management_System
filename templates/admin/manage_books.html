@@ -2,20 +2,21 @@
 {% block title %}Manage-Books{% endblock %}
 
 {% block content %}
+
 <div class="gap-2 d-md-flex justify-content-end mt-1 me-4 md-4">
 <a class="btn btn-primary" href="/add_books" role="button">Add Books</a>
 </div>
 
 
 
-<div id="booksContainer" class="container">
-    <div class="search-box">
+<div id="booksContainer" class="container mt-4">
+    <div class="search-box mt-4">
         <input type="text" id="searchInput" placeholder="Search any Book...">
     </div> 
     <div class="row" id=".card">
         {% for book in books | reverse %}
-            <div class="col-md-3 mt-3">
-                <div class="card" style="width: 15rem;">
+            <div class="col-6 col-md-4 col-lg-3 mt-3">
+                <div class="card">
                     {% if book.cover_image %}
                     <img src="{{ url_for('static', filename='images/' + book.cover_image) }}" class="card-img-top" alt="" style="height: 200px; object-fit: cover;">
                     {% else %}
@@ -42,7 +43,7 @@
 
     <script>
     const bookSearch   = document.getElementById('searchInput');
-    const bookCards    = document.querySelectorAll('.card');
+    const bookCards    = document.querySelectorAll('#booksContainer .col-md-3');
 
     bookSearch.addEventListener('keyup', function() {
         const searchText = bookSearch.value.toLowerCase();
